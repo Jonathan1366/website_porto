@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Jonathan Farrel Emanuel — Backend · AI · SRE</title>
+<title>Jonathan Farrel Emanuel | Fullstack · Backend · ML/AI</title>
+<meta name="description" content="Jonathan Farrel Emanuel is a fullstack engineer specializing in production-grade backend systems, ML/AI, fintech, and real-time trading platforms." />
+<script>document.documentElement.classList.add('js');</script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&amp;family=Syne:wght@400;600;700;800&amp;display=swap" rel="stylesheet" />
 <style>
   :root {
     --bg:        #080b0f;
@@ -26,6 +28,9 @@
     --sans:      'Syne', sans-serif;
     --radius:    6px;
     --glow:      0 0 20px rgba(0,210,140,0.15);
+    --scroll-progress: 0%;
+    --mouse-x: 50vw;
+    --mouse-y: 25vh;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -54,6 +59,16 @@
     z-index: 0;
   }
 
+  .ambient-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(520px circle at var(--mouse-x) var(--mouse-y), rgba(0,210,140,0.07), transparent 68%);
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+
   .container {
     max-width: 1100px;
     margin: 0 auto;
@@ -70,6 +85,16 @@
     background: rgba(8,11,15,0.88);
     backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border);
+  }
+  .scroll-progress {
+    position: absolute;
+    left: 0;
+    bottom: -1px;
+    width: var(--scroll-progress);
+    height: 2px;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    box-shadow: 0 0 12px rgba(0,210,140,0.45);
+    transform-origin: left;
   }
   nav .inner {
     display: flex;
@@ -96,6 +121,7 @@
     transition: color 0.2s;
   }
   .nav-links a:hover { color: var(--green); }
+  .nav-links a.active { color: var(--green); }
 
   /* ─── HERO ─── */
   #hero {
@@ -144,7 +170,9 @@
     color: var(--green);
     background: rgba(0,210,140,0.06);
     letter-spacing: 0.05em;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   }
+  .role-chip:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,210,140,0.09); }
   .role-chip.cyan { border-color: rgba(34,211,238,0.35); color: var(--cyan); background: rgba(34,211,238,0.06); }
   .role-chip.amber { border-color: rgba(245,158,11,0.35); color: var(--amber); background: rgba(245,158,11,0.06); }
 
@@ -244,8 +272,16 @@
   .term-dot.y { background: #f59e0b; }
   .term-dot.g { background: #22c55e; }
   .term-title { font-size: 11px; color: var(--text-dim); margin-left: 8px; }
-  .term-body { padding: 20px 24px; }
-  .term-line { display: flex; gap: 8px; margin: 3px 0; font-size: 12px; }
+  .term-body { padding: 20px 24px; overflow-x: auto; }
+  .term-line { display: flex; gap: 8px; margin: 3px 0; font-size: 12px; width: max-content; min-width: 100%; }
+  .js .terminal.reveal .term-line { opacity: 0; transform: translateX(-8px); }
+  .js .terminal.reveal.visible .term-line {
+    animation: terminalLine 0.36s ease forwards;
+    animation-delay: calc(var(--line-index, 0) * 55ms + 120ms);
+  }
+  @keyframes terminalLine {
+    to { opacity: 1; transform: translateX(0); }
+  }
   .term-prompt { color: var(--green); user-select: none; }
   .term-cmd { color: var(--cyan); }
   .term-comment { color: var(--text-dim); }
@@ -294,6 +330,7 @@
     padding: 28px 24px;
     transition: background 0.2s;
   }
+  .stack-cell-wide { grid-column: span 3; }
   .stack-cell:hover { background: var(--bg3); }
   .stack-cell-label {
     font-size: 10px;
@@ -326,7 +363,9 @@
     border: 1px solid rgba(255,255,255,0.07);
     color: var(--text);
     white-space: nowrap;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
   }
+  .tag:hover { color: var(--green); border-color: var(--border-hi); background: rgba(0,210,140,0.07); transform: translateY(-2px); }
 
   /* ─── EXPERIENCE ─── */
   .exp-list { display: flex; flex-direction: column; gap: 2px; }
@@ -442,6 +481,18 @@
     transform-origin: left;
     transition: transform 0.3s;
   }
+  .proj-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(280px circle at var(--card-x, 50%) var(--card-y, 50%), rgba(0,210,140,0.1), transparent 64%);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .proj-card.cyan::after { background: radial-gradient(280px circle at var(--card-x, 50%) var(--card-y, 50%), rgba(34,211,238,0.1), transparent 64%); }
+  .proj-card:hover::after { opacity: 1; }
+  .proj-card > * { position: relative; z-index: 1; }
   .proj-card.cyan::before { background: var(--cyan); }
   .proj-card:hover { border-color: var(--border-hi); transform: translateY(-2px); }
   .proj-card:hover::before { transform: scaleX(1); }
@@ -505,6 +556,7 @@
     color: var(--green);
     line-height: 1;
     margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
   }
   .metric-val.cyan { color: var(--cyan); }
   .metric-val.amber { color: var(--amber); }
@@ -523,6 +575,8 @@
     border-radius: var(--radius);
     overflow: hidden;
   }
+  .obs-panel-wide { grid-column: span 2; }
+  .obs-principles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 8px 0; }
   .obs-panel-header {
     background: var(--bg3);
     padding: 12px 18px;
@@ -599,8 +653,6 @@
   }
   .edu-card-sub { font-size: 12px; color: var(--text-dim); margin-bottom: 12px; }
   .edu-card-detail { font-size: 12px; color: var(--text); }
-  .gpa { font-size: 22px; font-family: var(--sans); font-weight: 800; color: var(--green); }
-
   /* ─── CONTACT ─── */
   #contact { padding-bottom: 120px; }
   .contact-inner {
@@ -651,11 +703,20 @@
 
   /* ─── SCROLL REVEAL ─── */
   .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.55s ease, transform 0.55s ease;
+    opacity: 1;
+    transform: none;
   }
-  .reveal.visible { opacity: 1; transform: none; }
+  .js .reveal {
+    opacity: 0;
+    transform: translateY(28px) scale(0.99);
+    filter: blur(3px);
+    transition:
+      opacity 0.7s cubic-bezier(0.2, 0.75, 0.25, 1),
+      transform 0.7s cubic-bezier(0.2, 0.75, 0.25, 1),
+      filter 0.7s ease;
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+  .js .reveal.visible { opacity: 1; transform: none; filter: blur(0); }
 
   /* ─── ANIMATIONS ─── */
   @keyframes fadeUp {
@@ -666,18 +727,36 @@
   /* ─── MOBILE ─── */
   @media (max-width: 768px) {
     .stack-grid { grid-template-columns: 1fr; }
+    .stack-cell-wide { grid-column: 1; }
     .proj-grid { grid-template-columns: 1fr; }
     .metrics-row { grid-template-columns: repeat(2, 1fr); }
     .obs-grid { grid-template-columns: 1fr; }
+    .obs-panel-wide { grid-column: 1; }
+    .obs-principles { grid-template-columns: 1fr; }
     .edu-row { grid-template-columns: 1fr; }
     .contact-inner { grid-template-columns: 1fr; }
     .contact-links { flex-direction: row; flex-wrap: wrap; }
     .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .exp-header { grid-template-columns: auto 1fr; }
+    .exp-period { grid-column: 2; text-align: left; }
     .nav-links { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .ambient-glow { display: none; }
+    .js .reveal,
+    .js .terminal.reveal .term-line { opacity: 1; transform: none; filter: none; }
   }
 </style>
 </head>
 <body>
+<div class="ambient-glow" aria-hidden="true"></div>
 
 <!-- NAV -->
 <nav>
@@ -687,34 +766,35 @@
       <a href="#stack">stack</a>
       <a href="#experience">experience</a>
       <a href="#projects">projects</a>
-      <a href="#observability">sre</a>
+      <a href="#observability">systems</a>
       <a href="#contact">contact</a>
     </div>
   </div>
+  <div class="scroll-progress" aria-hidden="true"></div>
 </nav>
 
 <!-- HERO -->
 <section id="hero">
   <div class="container">
     <div class="hero-inner">
-      <div class="hero-tag">// backend · ai · sre &amp; devex</div>
+      <div class="hero-tag">// fullstack · backend systems · ml/ai · fintech</div>
       <h1 class="hero-name">Jonathan<br>Farrel Emanuel</h1>
       <div class="hero-roles">
-        <span class="role-chip">Backend Engineer (Go)</span>
-        <span class="role-chip cyan">AI / LLM Engineer</span>
-        <span class="role-chip amber">SRE &amp; DevEx</span>
+        <span class="role-chip">Fullstack Engineer</span>
+        <span class="role-chip cyan">Backend Systems · Go</span>
+        <span class="role-chip amber">ML / AI · Fintech</span>
       </div>
       <p class="hero-bio">
-        <strong>3+ years</strong> designing high-throughput backend systems in production.
-        I write <strong>Go microservices</strong> that survive Black Friday traffic,
-        build <strong>autonomous AI agents</strong> with LLM reasoning loops,
-        and instrument <strong>observability stacks</strong> so on-call engineers sleep at night.
-        Currently at <strong>Superbank</strong> (IDX: SUPA), Indonesia's fastest-growing digital bank.
+        <strong>Fullstack engineer with 3+ years of production experience</strong> and deep backend expertise.
+        I ship systems end to end, from interfaces and <strong>Go, Python, and C++ services</strong>
+        to distributed data pipelines, infrastructure, and <strong>ML/AI products</strong>.
+        Currently a <strong>Backend Engineer at Hyperscal Solutions</strong>, with experience spanning
+        enterprise telco, digital banking, real-time ML, fintech, and algorithmic trading platforms.
       </p>
       <div class="hero-ctas">
         <a href="mailto:jonathanfarelemanuel@gmail.com" class="btn-primary">Contact Me</a>
-        <a href="https://www.linkedin.com/in/jonathanfarrel/" target="_blank" class="btn-ghost">LinkedIn ↗</a>
-        <a href="https://jonathan-farrel-emanuel.framer.website/" target="_blank" class="btn-ghost">Portfolio ↗</a>
+        <a href="https://www.linkedin.com/in/jonathanfarrel/" target="_blank" rel="noopener noreferrer" class="btn-ghost">LinkedIn ↗</a>
+        <a href="https://github.com/Jonathan1366" target="_blank" rel="noopener noreferrer" class="btn-ghost">GitHub Portfolio ↗</a>
       </div>
 
       <div class="hero-stats">
@@ -743,17 +823,18 @@
         <div class="term-dot r"></div>
         <div class="term-dot y"></div>
         <div class="term-dot g"></div>
-        <span class="term-title">jonathan@superbank — bash — 80×24</span>
+        <span class="term-title">jonathan@hyperscal · profile.json · 80×24</span>
       </div>
       <div class="term-body">
         <div class="term-line"><span class="term-prompt">❯</span><span class="term-cmd">cat profile.json</span></div>
         <div class="term-line"><span class="term-out">{</span></div>
-        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"role"</span>: <span class="term-val">"Backend + AI + SRE Engineer"</span>,</span></div>
-        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"primary_lang"</span>: <span class="term-val">"Go (goroutines, channels, pprof)"</span>,</span></div>
-        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"current_company"</span>: <span class="term-val">"Superbank (IDX: SUPA)"</span>,</span></div>
-        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"shipped"</span>: [<span class="term-val">"LLM agents"</span>, <span class="term-val">"fintech ledger"</span>, <span class="term-val">"CV pipelines"</span>],</span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"role"</span>: <span class="term-val">"Fullstack Engineer, Backend &amp; ML/AI"</span>,</span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"languages"</span>: [<span class="term-val">"Go"</span>, <span class="term-val">"Python"</span>, <span class="term-val">"C++"</span>, <span class="term-val">"TypeScript"</span>],</span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"current_company"</span>: <span class="term-val">"Hyperscal Solutions"</span>,</span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"domains"</span>: [<span class="term-val">"fintech"</span>, <span class="term-val">"trading"</span>, <span class="term-val">"enterprise platforms"</span>],</span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"shipped"</span>: [<span class="term-val">"distributed services"</span>, <span class="term-val">"AI agents"</span>, <span class="term-val">"real-time ML"</span>],</span></div>
         <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"observability"</span>: [<span class="term-val">"Prometheus"</span>, <span class="term-val">"Grafana"</span>, <span class="term-val">"Loki"</span>, <span class="term-val">"OTel"</span>],</span></div>
-        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"gpa"</span>: <span class="term-val">3.66</span>, <span class="term-key">"icpc"</span>: <span class="term-val">true</span></span></div>
+        <div class="term-line"><span class="term-out">&nbsp;&nbsp;<span class="term-key">"icpc_regionalist"</span>: <span class="term-val">true</span></span></div>
         <div class="term-line"><span class="term-out">}</span></div>
         <div class="term-line" style="margin-top:10px"><span class="term-prompt">❯</span><span class="term-cursor"></span></div>
       </div>
@@ -772,9 +853,15 @@
 
     <div class="stack-grid reveal">
       <div class="stack-cell">
-        <div class="stack-cell-label">Backend Systems</div>
+        <div class="stack-cell-label">Fullstack &amp; Backend Systems</div>
         <div class="tags">
           <span class="tag">Go</span>
+          <span class="tag">Python</span>
+          <span class="tag">C++</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">React</span>
+          <span class="tag">Next.js</span>
+          <span class="tag">Flutter</span>
           <span class="tag">Goroutines</span>
           <span class="tag">Channels</span>
           <span class="tag">pprof</span>
@@ -783,13 +870,12 @@
           <span class="tag">REST</span>
           <span class="tag">Event-Driven</span>
           <span class="tag">AuthN/AuthZ</span>
-          <span class="tag">Python</span>
           <span class="tag">FastAPI</span>
           <span class="tag">PHP / Laravel</span>
         </div>
       </div>
       <div class="stack-cell ai">
-        <div class="stack-cell-label">AI / LLM Engineering</div>
+        <div class="stack-cell-label">ML / AI Engineering</div>
         <div class="tags">
           <span class="tag">Claude API</span>
           <span class="tag">LLM Agents</span>
@@ -820,7 +906,7 @@
           <span class="tag">Linux / Bash</span>
         </div>
       </div>
-      <div class="stack-cell" style="grid-column: span 3;">
+      <div class="stack-cell stack-cell-wide">
         <div class="stack-cell-label">Datastores &amp; Patterns</div>
         <div class="tags">
           <span class="tag">PostgreSQL</span>
@@ -874,23 +960,53 @@
 
     <div class="exp-list">
 
+      <!-- Hyperscal Solutions -->
+      <div class="exp-item reveal">
+        <div class="exp-header">
+          <div class="exp-dot green"></div>
+          <div>
+            <div class="exp-title">Backend Engineer</div>
+            <div class="exp-subtitle">Hyperscal Solutions · Enterprise Platforms</div>
+          </div>
+          <div class="exp-period">
+            <div class="active-badge">● ACTIVE</div>
+            <div>Apr 2026 to Present</div>
+          </div>
+        </div>
+        <div class="exp-body">
+          <ul>
+            <li>Develop enterprise-grade <strong>Go backend services</strong> for CRM, Case Management, Workforce Management, CMS, outage handling, and payment-related workflows on a large telecommunications platform.</li>
+            <li>Designed <strong>Customer Information and Document Upload modules</strong> using hexagonal architecture, covering domain models, repositories, services, REST handlers, validation, PostgreSQL persistence, and signed file-storage integration.</li>
+            <li>Centralized shared <strong>Oracle and PostgreSQL connections</strong> across services, standardizing configuration, initialization, and database lifecycle management.</li>
+            <li>Implemented <strong>outage event workflows and case capabilities</strong> across migrations, persistence, APIs, search mappings, filtering, cursor-based pagination, and downstream Workforce Management updates.</li>
+            <li>Ship production-ready integrations with frontend, QA, product, and operations teams while reviewing payment architecture for <strong>performance, integrity, security, and fault isolation</strong>.</li>
+          </ul>
+          <div class="exp-tags">
+            <span class="exp-tag">Go</span>
+            <span class="exp-tag">PostgreSQL</span>
+            <span class="exp-tag">Oracle</span>
+            <span class="exp-tag">REST</span>
+            <span class="exp-tag">Hexagonal Architecture</span>
+            <span class="exp-tag cyan">Event Workflows</span>
+            <span class="exp-tag amber">Payments</span>
+          </div>
+        </div>
+      </div>
+
       <!-- Superbank -->
       <div class="exp-item reveal">
         <div class="exp-header">
           <div class="exp-dot green"></div>
           <div>
-            <div class="exp-title">Backend Engineer — Platform &amp; DevEx</div>
+            <div class="exp-title">Backend Engineer, Platform &amp; DevEx</div>
             <div class="exp-subtitle">Superbank (IDX: SUPA) · Jakarta · Hybrid</div>
           </div>
-          <div class="exp-period">
-            <div class="active-badge">● ACTIVE</div>
-            <div>Oct 2025 – Apr 2026</div>
-          </div>
+          <div class="exp-period">Oct 2025 to Apr 2026</div>
         </div>
         <div class="exp-body">
           <ul>
             <li>Owned internal <strong>production backend systems</strong> used by multiple engineering teams, focusing on reliability, correctness, and operational visibility inside Indonesia's fastest-growing digital bank (5M+ customers).</li>
-            <li>Designed and shipped a <strong>Multi-Question Splitter engine</strong> — a multi-request parsing and validation layer that improved bot interaction accuracy and reduced ambiguous backend responses.</li>
+            <li>Designed and shipped a <strong>Multi-Question Splitter engine</strong>, a multi-request parsing and validation layer that improved bot interaction accuracy and reduced ambiguous backend responses.</li>
             <li>Upgraded the <strong>"SKY" HR RAG Chatbot</strong>, transforming raw retrieval outputs into human-readable summaries with structured LLM post-processing.</li>
             <li>Built an <strong>SLA &amp; Knowledge Analytics engine</strong> to surface response gaps, track reliability degradations, and drive continuous knowledge base optimization.</li>
             <li>Instrumented <strong>metrics, traces, and logs</strong> across internal services using Prometheus + OTel stack, directly reducing incident resolution time for on-call engineers.</li>
@@ -916,11 +1032,11 @@
             <div class="exp-title">Machine Learning Engineer</div>
             <div class="exp-subtitle">HIGO · Jakarta · On-site</div>
           </div>
-          <div class="exp-period">Aug 2025 – Oct 2025</div>
+          <div class="exp-period">Aug 2025 to Oct 2025</div>
         </div>
         <div class="exp-body">
           <ul>
-            <li>Built and deployed a <strong>real-time Computer Vision platform</strong> on GCP — leveraging DeepStream, Qdrant (vector DB), and MediaMTX for low-latency multi-stream analytics in retail environments.</li>
+            <li>Built and deployed a <strong>real-time Computer Vision platform</strong> on GCP using DeepStream, Qdrant (vector DB), and MediaMTX for low-latency multi-stream analytics in retail environments.</li>
             <li>Trained a <strong>YOLOv8 brand detection model</strong> achieving <strong>90%+ accuracy</strong> in complex, occluded retail environments with variable lighting.</li>
             <li>Integrated <strong>facial recognition + object tracking</strong> with 95%+ re-identification accuracy across multi-camera setups.</li>
             <li>Re-architected the <strong>RTSP streaming pipeline</strong>, eliminating bottlenecks and increasing throughput by <strong>40%</strong> under production load.</li>
@@ -945,17 +1061,17 @@
             <div class="exp-title">Backend Engineer Lead</div>
             <div class="exp-subtitle">TechyNox · Jakarta · On-site · Full-time</div>
           </div>
-          <div class="exp-period">Nov 2022 – Jul 2025</div>
+          <div class="exp-period">Nov 2022 to Jul 2025</div>
         </div>
         <div class="exp-body">
           <ul>
-            <li>Owned <strong>tech stack selection and system architecture</strong> for the entire backend org — standardized Golang microservices that became the engineering foundation across all products.</li>
+            <li>Owned <strong>tech stack selection and system architecture</strong> for the entire backend org. Standardized Golang microservices became the engineering foundation across all products.</li>
             <li>Built and scaled <strong>Go microservices (gRPC + Kafka)</strong> to support real-time workloads with strict uptime SLAs.</li>
-            <li><strong>Led and mentored a 10-person engineering team</strong> — code reviews, best practices, and unblocking junior engineers through technical coaching.</li>
+            <li><strong>Led and mentored a 10-person engineering team</strong> through code reviews, best practices, and technical coaching.</li>
             <li>Optimized PostgreSQL query plans and hot paths through profiling and indexing strategies, achieving <strong>~30% database performance improvement</strong>.</li>
             <li>Redesigned service architecture and connection pooling, reducing <strong>infrastructure costs by ~90%</strong> without sacrificing reliability.</li>
             <li>Established full <strong>observability standards</strong> (Prometheus + Grafana + Loki) enabling faster root-cause analysis and proactive incident detection.</li>
-            <li>Led technical pitching and architecture walkthroughs to a key enterprise client — <strong>successfully closing the contract</strong>.</li>
+            <li>Led technical pitching and architecture walkthroughs for a key enterprise client, <strong>successfully closing the contract</strong>.</li>
           </ul>
           <div class="exp-tags">
             <span class="exp-tag">Go</span>
@@ -993,11 +1109,11 @@
           <div class="proj-tagline">Autonomous AI Agent</div>
           <div class="proj-name">ARTHUR</div>
         </div>
-        <p class="proj-desc">An autonomous LLM-powered crypto trading agent built from scratch — real-time market reasoning, human-in-the-loop execution, multi-source data pipeline.</p>
+        <p class="proj-desc">An autonomous LLM-powered crypto trading agent built from scratch with real-time market reasoning, human-in-the-loop execution, and a multi-source data pipeline.</p>
         <div class="proj-details">
           <div class="proj-detail"><strong>Reasoning Engine:</strong> Claude API with structured tool-use, prompt versioning, and trace logging for full agent observability.</div>
           <div class="proj-detail"><strong>HITL Approval Flow:</strong> Agent proposes trades with full reasoning via Telegram, awaits confirmation, executes atomically on Hyperliquid perpetuals.</div>
-          <div class="proj-detail"><strong>5-Source Ingestion:</strong> Binance, CoinGecko, Coinglass, CryptoQuant, Alternative.me — normalized, cached, deduped under high polling frequency.</div>
+          <div class="proj-detail"><strong>5-Source Ingestion:</strong> Binance, CoinGecko, Coinglass, CryptoQuant, and Alternative.me data normalized, cached, and deduped under high polling frequency.</div>
           <div class="proj-detail"><strong>Patterns:</strong> Prompt versioning, reasoning trace logs, agent observability as a first-class concern.</div>
         </div>
         <div class="tags" style="margin-top:4px">
@@ -1013,12 +1129,12 @@
         <div class="proj-icon">💰</div>
         <div>
           <div class="proj-tagline">Financial OS · Fintech</div>
-          <div class="proj-name">Arthex</div>
+          <div class="proj-name">Artex</div>
         </div>
-        <p class="proj-desc">A financial operating system for retail investors in Indonesia — portfolio tracking, AI-driven tax automation, and production-grade payment infrastructure.</p>
+        <p class="proj-desc">A financial operating system for retail investors in Indonesia with portfolio tracking, AI-driven tax automation, and production-grade payment infrastructure.</p>
         <div class="proj-details">
-          <div class="proj-detail"><strong>Double-Entry Ledger:</strong> Posting-in-Batch pattern — immutable append-only entries with <code>SUM(amount)=0</code> enforced via DB CHECK constraints.</div>
-          <div class="proj-detail"><strong>Payment State Machine:</strong> Write-ahead persistence — no transaction lost if service crashes mid-flight.</div>
+          <div class="proj-detail"><strong>Double-Entry Ledger:</strong> Posting-in-Batch pattern with immutable append-only entries and <code>SUM(amount)=0</code> enforced via DB CHECK constraints.</div>
+          <div class="proj-detail"><strong>Payment State Machine:</strong> Write-ahead persistence ensures no transaction is lost if the service crashes mid-flight.</div>
           <div class="proj-detail"><strong>2-Layer Idempotency:</strong> App-level deduplication + DB unique constraints preventing double-charges under concurrent retries.</div>
           <div class="proj-detail"><strong>Webhook Security:</strong> HMAC-SHA256 verification + transactional outbox for at-least-once delivery without dual-write inconsistency.</div>
         </div>
@@ -1049,7 +1165,7 @@
       <div class="obs-panel">
         <div class="obs-panel-header">
           <div class="dot-pulse"></div>
-          System Reliability — Superbank
+          System Reliability, Superbank
         </div>
         <div class="obs-panel-body">
           <div class="obs-row">
@@ -1083,7 +1199,7 @@
       <div class="obs-panel">
         <div class="obs-panel-header">
           <div class="dot-pulse"></div>
-          Infrastructure — TechyNox
+          Infrastructure, TechyNox
         </div>
         <div class="obs-panel-body">
           <div class="obs-row">
@@ -1114,24 +1230,24 @@
         </div>
       </div>
 
-      <div class="obs-panel" style="grid-column: span 2;">
+      <div class="obs-panel obs-panel-wide">
         <div class="obs-panel-header">
           <div class="dot-pulse"></div>
           Observability Philosophy
         </div>
         <div class="obs-panel-body">
-          <div style="display:grid; grid-template-columns: repeat(3,1fr); gap: 24px; padding: 8px 0;">
+          <div class="obs-principles">
             <div>
               <div style="color:var(--amber); font-size:11px; letter-spacing:0.1em; margin-bottom:8px; text-transform:uppercase;">Metrics</div>
-              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">Prometheus counters, gauges, and histograms across all critical paths. Grafana dashboards surfacing SLIs — not just uptime but request latency percentiles, error budgets, and saturation signals.</div>
+              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">Prometheus counters, gauges, and histograms across all critical paths. Grafana dashboards surface SLIs such as request latency percentiles, error budgets, and saturation signals.</div>
             </div>
             <div>
               <div style="color:var(--cyan); font-size:11px; letter-spacing:0.1em; margin-bottom:8px; text-transform:uppercase;">Tracing</div>
-              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">OpenTelemetry-based distributed tracing across microservice boundaries. Correlation IDs propagated end-to-end — enabling precise latency attribution in Kafka-driven async pipelines.</div>
+              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">OpenTelemetry-based distributed tracing across microservice boundaries. End-to-end correlation IDs enable precise latency attribution in Kafka-driven async pipelines.</div>
             </div>
             <div>
               <div style="color:var(--green); font-size:11px; letter-spacing:0.1em; margin-bottom:8px; text-transform:uppercase;">Logging</div>
-              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">Structured JSON logging shipped to Loki with cardinality discipline. Log levels enforced at code review — info for decision points, warn for degraded paths, error only for actionable failures.</div>
+              <div style="font-size:12px; color:var(--text-dim); line-height:1.7;">Structured JSON logging shipped to Loki with cardinality discipline. Code review enforces clear log levels for decision points, degraded paths, and actionable failures.</div>
             </div>
           </div>
         </div>
@@ -1152,17 +1268,16 @@
     <div class="edu-row reveal">
       <div class="edu-card">
         <div class="edu-card-title">Bunda Mulia University</div>
-        <div class="edu-card-sub">Bachelor of Computer Science · Jakarta · 2022–2026</div>
-        <div class="gpa">3.66 / 4.00</div>
-        <div class="edu-card-detail" style="margin-top:12px; font-size:11px; color:var(--text-dim);">
-          Algorithms · OS (Concurrency, Memory) · Distributed Systems · Computer Networks
+        <div class="edu-card-sub">Bachelor of Computer Science · Jakarta · 2022 to 2026</div>
+        <div class="edu-card-detail" style="margin-top:12px; font-size:11px; color:var(--text-dim); line-height:1.8;">
+          Core studies: Algorithms &amp; Data Structures · Operating Systems · Distributed Systems · Computer Networks · Database Systems · Artificial Intelligence · Machine Learning
         </div>
       </div>
       <div class="edu-card">
         <div class="edu-card-title">ICPC Asia Jakarta</div>
         <div class="edu-card-sub">Regional Contestant · January 2023</div>
         <div style="margin-top:12px; font-size:12px; color:var(--text-dim); line-height:1.7;">
-          Solved algorithmic problems under strict time and memory constraints at one of Asia's most competitive collegiate programming contests. Demonstrates strong analytical thinking under pressure — the same muscle used in production incident response.
+          Solved algorithmic problems under strict time and memory constraints at one of Asia's most competitive collegiate programming contests. The experience strengthened the analytical thinking I use during production incident response.
         </div>
         <div style="margin-top:14px;">
           <span class="tag">Algorithms</span>
@@ -1187,8 +1302,8 @@
       <div>
         <div class="contact-heading">Let's build<br>something reliable.</div>
         <p class="contact-sub">
-          Open to Backend, AI/LLM Engineering, and SRE/DevEx roles. I bring production-grade Go systems, real observability discipline, and a track record of shipping in fintech at scale.
-          If you're building something that needs to be fast, correct, and observable — let's talk.
+          Fullstack engineer with a backend core, working across Go, Python, C++, modern interfaces, and ML/AI systems.
+          If you're building fintech, trading, or data-intensive products that need to be fast, correct, and observable, let's talk.
         </p>
       </div>
       <div class="contact-links">
@@ -1196,13 +1311,13 @@
           <span class="contact-link-icon">✉</span>
           jonathanfarelemanuel@gmail.com
         </a>
-        <a href="https://www.linkedin.com/in/jonathanfarrel/" target="_blank" class="contact-link">
+        <a href="https://www.linkedin.com/in/jonathanfarrel/" target="_blank" rel="noopener noreferrer" class="contact-link">
           <span class="contact-link-icon">in</span>
           linkedin.com/in/jonathanfarrel
         </a>
-        <a href="https://jonathan-farrel-emanuel.framer.website/" target="_blank" class="contact-link">
+        <a href="https://github.com/Jonathan1366" target="_blank" rel="noopener noreferrer" class="contact-link">
           <span class="contact-link-icon">↗</span>
-          Portfolio Website
+          github.com/Jonathan1366
         </a>
       </div>
     </div>
@@ -1211,20 +1326,131 @@
 
 <!-- FOOTER -->
 <footer>
-  <span>jfe</span>@prod:~$ echo "Built in Go — fast, reliable, observable." &nbsp;·&nbsp; Jakarta, Indonesia
+  <span>jfe</span>@prod:~$ echo "Fullstack delivery. Backend depth. Intelligent systems." &nbsp;·&nbsp; Jakarta, Indonesia
 </footer>
 
 <script>
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-        observer.unobserve(e.target);
-      }
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const revealItems = [...document.querySelectorAll('.reveal')];
+
+  revealItems.forEach((item) => {
+    const group = item.closest('section') || item.parentElement;
+    const groupItems = [...group.querySelectorAll('.reveal')];
+    const groupIndex = groupItems.indexOf(item);
+    item.style.setProperty('--reveal-delay', `${Math.min(groupIndex, 3) * 70}ms`);
+  });
+
+  document.querySelectorAll('.terminal .term-line').forEach((line, index) => {
+    line.style.setProperty('--line-index', index);
+  });
+
+  if ('IntersectionObserver' in window && !reducedMotion) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+
+    revealItems.forEach((item) => revealObserver.observe(item));
+  } else {
+    revealItems.forEach((item) => item.classList.add('visible'));
+  }
+
+  const animateCounter = (element) => {
+    const label = element.textContent.trim();
+    const parts = label.match(/^([^0-9]*)([0-9]+)(.*)$/);
+    if (!parts) return;
+
+    const [, prefix, targetText, suffix] = parts;
+    const target = Number(targetText);
+    const startedAt = performance.now();
+    const duration = 950;
+
+    const tick = (now) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      element.textContent = `${prefix}${Math.round(target * eased)}${suffix}`;
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+
+    requestAnimationFrame(tick);
+  };
+
+  if ('IntersectionObserver' in window && !reducedMotion) {
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        animateCounter(entry.target);
+        counterObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.65 });
+
+    document.querySelectorAll('.stat-num, .metric-val').forEach((counter) => {
+      counterObserver.observe(counter);
     });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  }
+
+  const navLinks = [...document.querySelectorAll('.nav-links a')];
+  const navTargets = navLinks.map((link) => ({
+    link,
+    section: document.querySelector(link.getAttribute('href'))
+  })).filter(({ section }) => section);
+
+  const updateScrollUI = () => {
+    const page = document.documentElement;
+    const maxScroll = page.scrollHeight - window.innerHeight;
+    const progress = maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+    page.style.setProperty('--scroll-progress', `${progress}%`);
+
+    const marker = window.scrollY + window.innerHeight * 0.36;
+    let activeLink = null;
+    navTargets.forEach(({ link, section }) => {
+      if (section.offsetTop <= marker) activeLink = link;
+    });
+    navLinks.forEach((link) => link.classList.toggle('active', link === activeLink));
+  };
+
+  let scrollFrame = null;
+  const requestScrollUpdate = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      updateScrollUI();
+      scrollFrame = null;
+    });
+  };
+
+  updateScrollUI();
+  window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestScrollUpdate);
+
+  if (!reducedMotion && window.matchMedia('(pointer: fine)').matches) {
+    let pointerFrame = null;
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 4;
+
+    window.addEventListener('pointermove', (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+      if (pointerFrame) return;
+      pointerFrame = requestAnimationFrame(() => {
+        document.documentElement.style.setProperty('--mouse-x', `${pointerX}px`);
+        document.documentElement.style.setProperty('--mouse-y', `${pointerY}px`);
+        pointerFrame = null;
+      });
+    }, { passive: true });
+
+    document.querySelectorAll('.proj-card').forEach((card) => {
+      card.addEventListener('pointermove', (event) => {
+        const bounds = card.getBoundingClientRect();
+        const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+        const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+        card.style.setProperty('--card-x', `${x}%`);
+        card.style.setProperty('--card-y', `${y}%`);
+      });
+    });
+  }
 </script>
 </body>
 </html>
